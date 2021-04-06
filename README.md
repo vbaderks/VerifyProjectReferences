@@ -1,8 +1,10 @@
 
-# Convert Project Dependencies to MSBuild Project references
+# Verify project references
 
-ConvertProjDepToProjRef is a small tool to convert project dependencies in a Visual Studio solution file (.sln)
-into MSBuild project references (ProjectReference) in project files. It will do 95% of the work.
+VerifyProjectReferences is a small tool to verify project references in a Visual Studio solution file (.sln)
+It will scan all included project files and check that the GUIDS in the project reference are matching with
+the actual project GUID. If these Guids don't match MSBuild won't build the depedencies correctly.
+Note: Project refernces to SDK style .csproj files will have no GUIDs, this is to be expected and fine.
 
 ## Features
 
@@ -15,6 +17,5 @@ into MSBuild project references (ProjectReference) in project files. It will do 
 
 ## Usage Instructions
 
-* Run the tool on a solution file: ConvertProjDepToProjRef.exe MySolution.sln
-* Update C++ projects that only perform custom builds as ConfigurationType “Utility”
-* Use a text editor to remove the ProjectSection(ProjectDependencies) = postProject sections from the .sln file.
+* Run the tool on a solution file: VerifyProjectReferences.exe MySolution.sln
+* Check the output and correct found isses.
