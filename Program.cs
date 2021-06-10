@@ -46,7 +46,9 @@ try
                 var referenceGuid = GetProjectReferenceGuid(item);
                 if (actualGuid != referenceGuid)
                 {
+                    ForegroundColor = ConsoleColor.Red;
                     WriteLine("   Invalid project reference GUID {0} (actual = {1})", referenceGuid, actualGuid);
+                    ResetColor();
                 }
             }
         }
@@ -56,7 +58,9 @@ try
 }
 catch (Exception e)
 {
+    ForegroundColor = ConsoleColor.Red;
     WriteLine("Error: " + e.Message);
+    ResetColor();
     return failure;
 }
 
