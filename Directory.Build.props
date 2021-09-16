@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+
+    <!-- Build to a folder outside the source folders, making it easier to clean. -->
+    <BaseOutputPath>$(MSBuildThisFileDirectory)\build\bin</BaseOutputPath>
+    <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)\build\intermediate</BaseIntermediateOutputPath>
+    <MSBuildProjectExtensionsPath>$(BaseIntermediateOutputPath)</MSBuildProjectExtensionsPath>
+
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+
+  </PropertyGroup>
+</Project>
