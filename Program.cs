@@ -1,4 +1,5 @@
 using Microsoft.Build.Construction;
+using Microsoft.Build.Exceptions;
 using System;
 using System.IO;
 using static System.Console;
@@ -8,6 +9,7 @@ using static System.Console;
 const int success = 0;
 const int failure = 1;
 const string projectReferenceItemType = "ProjectReference";
+int errorsFound = 0;
 
 if (args.Length < 1)
 {
@@ -42,29 +44,51 @@ try
             {
                 WriteLine("  Verifying ProjectReference {0} ", item.Include);
 
-                var actualGuid = GetProjectGuid(project.AbsolutePath, item.Include);
-                var referenceGuid = GetProjectReferenceGuid(item);
-                if (actualGuid != referenceGuid)
+                try
                 {
-                    ForegroundColor = ConsoleColor.Red;
-                    WriteLine("   Invalid project reference GUID {0} (actual = {1})", referenceGuid, actualGuid);
-                    ResetColor();
+                    var projectGuid = GetProjectGuidOfReference(project.AbsolutePath, item.Include);
+                    var referenceGuid = GetProjectReferenceGuid(item);
+                    if (IsDotNetSdkProject(project.AbsolutePath))
+                    {
+                        if (!referenceGuid.Equals(Guid.Empty))
+                        {
+                            DisplayErrorMessage("   Not needed project reference GUID {0}", referenceGuid);
+                            errorsFound++;
+                        }
+                    }
+                    else
+                    {
+                        if (projectGuid != referenceGuid)
+                        {
+                            DisplayErrorMessage("   Invalid project reference GUID {0} (actual = {1})", referenceGuid, projectGuid);
+                            errorsFound++;
+                        }
+                    }
+                }
+                catch (InvalidProjectFileException e)
+                {
+                    DisplayErrorMessage("   {0}", e.Message);
+                    errorsFound++;
                 }
             }
         }
+    }
+
+    if (errorsFound != 0)
+    {
+        DisplayErrorMessage("\nErrors detected: error count = {0}", errorsFound);
+        return failure;
     }
 
     return success;
 }
 catch (Exception e)
 {
-    ForegroundColor = ConsoleColor.Red;
-    WriteLine("Error: " + e.Message);
-    ResetColor();
+    DisplayErrorMessage("Error: {0}", e.Message);
     return failure;
 }
 
-static Guid GetProjectGuid(string absoluteProjectPath, string relativeProjectPath)
+static Guid GetProjectGuidOfReference(string absoluteProjectPath, string relativeProjectPath)
 {
     string? projectDirectory = Path.GetDirectoryName(absoluteProjectPath);
     if (projectDirectory == null)
@@ -93,4 +117,20 @@ static Guid GetProjectReferenceGuid(ProjectElementContainer item)
     }
 
     return Guid.Empty;
+}
+
+static bool IsDotNetSdkProject(string projectPath)
+{
+    if (Path.GetExtension(projectPath) != ".csproj")
+        return false;
+
+    var project = ProjectRootElement.Open(projectPath);
+    return !string.IsNullOrEmpty(project.Sdk);
+}
+
+static void DisplayErrorMessage(string format, params object[] arguments)
+{
+    ForegroundColor = ConsoleColor.Red;
+    WriteLine(format, arguments);
+    ResetColor();
 }
