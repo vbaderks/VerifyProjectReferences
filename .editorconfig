@@ -1,5 +1,5 @@
-# Copyright (c) Team CharLS.
-# SPDX-License-Identifier: BSD-3-Clause
+# Copyright (c) Victor Derks.
+# SPDX-License-Identifier: MIT
 
 root = true
 
@@ -12,6 +12,9 @@ insert_final_newline = true
 
 [*.props]
 indent_size = 2
+
+[*.md]
+trim_trailing_whitespace = false
 
 [*.cs]
 indent_size = 4

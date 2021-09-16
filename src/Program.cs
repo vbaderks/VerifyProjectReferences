@@ -1,3 +1,6 @@
+// Copyright (c) Victor Derks.
+// SPDX-License-Identifier: MIT
+
 using Microsoft.Build.Construction;
 using Microsoft.Build.Exceptions;
 using System;
