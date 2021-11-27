@@ -3,11 +3,7 @@
 
 using Microsoft.Build.Construction;
 using Microsoft.Build.Exceptions;
-using System;
-using System.IO;
 using static System.Console;
-
-[assembly: CLSCompliant(true)]
 
 const int success = 0;
 const int failure = 1;

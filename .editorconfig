@@ -13,6 +13,9 @@ insert_final_newline = true
 [*.props]
 indent_size = 2
 
+[*.csproj]
+indent_size = 2
+
 [*.md]
 trim_trailing_whitespace = false
 
@@ -81,6 +84,10 @@ dotnet_diagnostic.SA1516.severity = none
 # Rational: Formatting rule is incompatible with StyleCop
 dotnet_diagnostic.IDE0055.severity = none
 
+# CA1031: Do not catch general exception types
+# Rational: Ok, as only catch is in main
+dotnet_diagnostic.CA1031.severity = none
+
 # CA1303: literal string used instead of string from resource
 # Rational: Only English is used, no support for other languages by design.
 dotnet_diagnostic.CA1303.severity = none
@@ -88,3 +95,7 @@ dotnet_diagnostic.CA1303.severity = none
 # CA1062: In externally visible method '', validate parameter '' is non-null before usage
 # Rational: non-null is already covered by Nullable
 dotnet_diagnostic.CA1062.severity = none
+
+# CA1812: Avoid uninstantiated internal classes
+# Rational: false warning, caused by compiler generated class "program"
+dotnet_diagnostic.CA1812.severity = none

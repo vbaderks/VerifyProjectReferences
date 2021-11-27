@@ -8,7 +8,7 @@ Note: Project references to SDK style .csproj files have no GUIDs, this is to be
 
 ## Features
 
-* .NET 5.0 App.
+* .NET 6.0 App.
 
 ## Build Instructions
 
