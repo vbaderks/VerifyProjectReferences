@@ -45,7 +45,6 @@ try
 
                 try
                 {
-                    var projectGuid = GetProjectGuidOfReference(project.AbsolutePath, item.Include);
                     var referenceGuid = GetProjectReferenceGuid(item);
                     if (IsDotNetSdkProject(project.AbsolutePath))
                     {
@@ -57,6 +56,8 @@ try
                     }
                     else
                     {
+                        var projectGuid = GetProjectGuidOfReference(project.AbsolutePath, item.Include, solutionFile);
+
                         if (projectGuid != referenceGuid)
                         {
                             DisplayErrorMessage("   Invalid project reference GUID {0} (actual = {1})", referenceGuid, projectGuid);
@@ -64,7 +65,7 @@ try
                         }
                     }
                 }
-                catch (InvalidProjectFileException e)
+                catch (Exception e) when (e is InvalidProjectFileException or IOException)
                 {
                     DisplayErrorMessage("   {0}", e.Message);
                     errorsFound++;
@@ -87,21 +88,35 @@ catch (Exception e)
     return failure;
 }
 
-static Guid GetProjectGuidOfReference(string absoluteProjectPath, string relativeProjectPath)
+static Guid GetProjectGuidOfReference(string absoluteProjectPath, string relativeProjectPath, SolutionFile solutionFile)
 {
     string? projectDirectory = Path.GetDirectoryName(absoluteProjectPath);
     if (projectDirectory == null)
-        return Guid.Empty;
+        throw new IOException($"Failed to get directory name from {absoluteProjectPath}");
 
     string referencedProjectPath = Path.Combine(projectDirectory, relativeProjectPath);
     var msbuildProject = ProjectRootElement.Open(referencedProjectPath);
     if (msbuildProject == null)
-        return Guid.Empty;
+        throw new IOException($"Failed to open {referencedProjectPath}");
 
-    foreach (var prop in msbuildProject.Properties)
+    if (IsDotNetSdkProject(referencedProjectPath))
     {
-        if (prop.Name == "ProjectGuid")
-            return new Guid(prop.Value);
+        // .NET SDK style project files have only a GUID in the .sln file.
+        foreach (var keyValuePair in solutionFile.ProjectsByGuid)
+        {
+            string normalizedPath = Path.GetFullPath(referencedProjectPath);
+
+            if (keyValuePair.Value.AbsolutePath == normalizedPath)
+                return new Guid(keyValuePair.Key);
+        }
+    }
+    else
+    {
+        foreach (var prop in msbuildProject.Properties)
+        {
+            if (prop.Name == "ProjectGuid")
+                return new Guid(prop.Value);
+        }
     }
 
     return Guid.Empty;
