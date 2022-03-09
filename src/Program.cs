@@ -106,7 +106,7 @@ static Guid GetProjectGuidOfReference(string absoluteProjectPath, string relativ
         {
             string normalizedPath = Path.GetFullPath(referencedProjectPath);
 
-            if (keyValuePair.Value.AbsolutePath == normalizedPath)
+            if (string.Equals(keyValuePair.Value.AbsolutePath, normalizedPath, StringComparison.OrdinalIgnoreCase))
                 return new Guid(keyValuePair.Key);
         }
     }
