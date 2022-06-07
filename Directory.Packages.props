@@ -1,5 +1,5 @@
 <Project>
   <ItemGroup>
-    <PackageVersion Include="Microsoft.Build" Version="17.1.0" />
+    <PackageVersion Include="Microsoft.Build" Version="17.2.0" />
   </ItemGroup>
 </Project>
