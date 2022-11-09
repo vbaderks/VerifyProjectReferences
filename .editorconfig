@@ -99,3 +99,7 @@ dotnet_diagnostic.CA1062.severity = none
 # CA1812: Avoid uninstantiated internal classes
 # Rational: false warning, caused by compiler generated class "program"
 dotnet_diagnostic.CA1812.severity = none
+
+# CA1852: Type 'Program' can be sealed because it has no subtypes in its containing assembly and is not externally visible
+# Rational: false warning, caused by compiler generated class "program"
+dotnet_diagnostic.CA1852.severity = none
