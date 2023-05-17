@@ -33,9 +33,7 @@ try
             continue;
 
         WriteLine(" Verifying project {0} ({1})", project.ProjectName, project.RelativePath);
-        var msbuildProject = ProjectRootElement.Open(project.AbsolutePath);
-        if (msbuildProject == null)
-            throw new FileLoadException();
+        var msbuildProject = ProjectRootElement.Open(project.AbsolutePath) ?? throw new FileLoadException();
 
         foreach (var item in msbuildProject.Items)
         {
@@ -90,13 +88,10 @@ catch (Exception e)
 
 static Guid GetProjectGuidOfReference(string absoluteProjectPath, string relativeProjectPath, SolutionFile solutionFile)
 {
-    string? projectDirectory = Path.GetDirectoryName(absoluteProjectPath);
-    if (projectDirectory == null)
+    string? projectDirectory = Path.GetDirectoryName(absoluteProjectPath) ??
         throw new IOException($"Failed to get directory name from {absoluteProjectPath}");
-
     string referencedProjectPath = Path.Combine(projectDirectory, relativeProjectPath);
-    var msbuildProject = ProjectRootElement.Open(referencedProjectPath);
-    if (msbuildProject == null)
+    var msbuildProject = ProjectRootElement.Open(referencedProjectPath) ??
         throw new IOException($"Failed to open {referencedProjectPath}");
 
     if (IsDotNetSdkProject(referencedProjectPath))
@@ -126,7 +121,7 @@ static Guid GetProjectReferenceGuid(ProjectElementContainer item)
 {
     foreach (ProjectElement child in item.Children)
     {
-        if (child is ProjectMetadataElement {Name: "Project"} metadata)
+        if (child is ProjectMetadataElement { Name: "Project" } metadata)
             return new Guid(metadata.Value);
     }
 
