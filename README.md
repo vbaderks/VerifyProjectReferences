@@ -10,7 +10,7 @@ In this scenario Visual Studio will show a yellow triangle and the project refer
 
 ## Features
 
-* .NET 7.0 App.
+* .NET 8.0 App.
 
 ## Build Instructions
 

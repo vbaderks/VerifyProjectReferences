@@ -88,8 +88,8 @@ catch (Exception e)
 
 static Guid GetProjectGuidOfReference(string absoluteProjectPath, string relativeProjectPath, SolutionFile solutionFile)
 {
-    string? projectDirectory = Path.GetDirectoryName(absoluteProjectPath) ??
-        throw new IOException($"Failed to get directory name from {absoluteProjectPath}");
+    string projectDirectory = Path.GetDirectoryName(absoluteProjectPath) ??
+                              throw new IOException($"Failed to get directory name from {absoluteProjectPath}");
     string referencedProjectPath = Path.Combine(projectDirectory, relativeProjectPath);
     var msbuildProject = ProjectRootElement.Open(referencedProjectPath) ??
         throw new IOException($"Failed to open {referencedProjectPath}");
