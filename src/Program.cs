@@ -12,7 +12,7 @@ int errorsFound = 0;
 
 if (args.Length < 1)
 {
-    WriteLine("Usage: VerifyProjectReferences solution-filename.sln");
+    WriteLine("Usage: VerifyProjectReferences <solution-filename.sln>");
     return failure;
 }
 
@@ -25,21 +25,21 @@ try
     }
 
     var solutionFile = SolutionFile.Parse(solutionPath);
-    WriteLine("Verifying solution {0}", solutionPath);
+    WriteLine($"Verifying solution {solutionPath}");
 
     foreach (var project in solutionFile.ProjectsInOrder)
     {
         if (project.ProjectType != SolutionProjectType.KnownToBeMSBuildFormat)
             continue;
 
-        WriteLine(" Verifying project {0} ({1})", project.ProjectName, project.RelativePath);
+        WriteLine($" Verifying project {project.ProjectName} ({project.RelativePath})");
         var msbuildProject = ProjectRootElement.Open(project.AbsolutePath) ?? throw new FileLoadException();
 
         foreach (var item in msbuildProject.Items)
         {
             if (item.ItemType == projectReferenceItemType)
             {
-                WriteLine("  Verifying ProjectReference {0} ", item.Include);
+                WriteLine($"  Verifying ProjectReference {item.Include} ");
 
                 try
                 {
@@ -48,7 +48,7 @@ try
                     {
                         if (!referenceGuid.Equals(Guid.Empty))
                         {
-                            DisplayErrorMessage("   Not needed project reference GUID {0}", referenceGuid);
+                            DisplayErrorMessage($"   Not needed project reference GUID {referenceGuid}");
                             errorsFound++;
                         }
                     }
@@ -58,14 +58,14 @@ try
 
                         if (projectGuid != referenceGuid)
                         {
-                            DisplayErrorMessage("   Invalid project reference GUID {0} (actual = {1})", referenceGuid, projectGuid);
+                            DisplayErrorMessage($"   Invalid project reference GUID {referenceGuid} (actual = {projectGuid})");
                             errorsFound++;
                         }
                     }
                 }
                 catch (Exception e) when (e is InvalidProjectFileException or IOException)
                 {
-                    DisplayErrorMessage("   {0}", e.Message);
+                    DisplayErrorMessage($"   {e.Message}");
                     errorsFound++;
                 }
             }
@@ -74,15 +74,16 @@ try
 
     if (errorsFound != 0)
     {
-        DisplayErrorMessage("\nErrors detected: error count = {0}", errorsFound);
+        DisplayErrorMessage($"\nErrors detected: error count = {errorsFound}");
         return failure;
     }
 
+    WriteLine("No errors found");
     return success;
 }
 catch (Exception e)
 {
-    DisplayErrorMessage("Error: {0}", e.Message);
+    DisplayErrorMessage($"Error: {e.Message}");
     return failure;
 }
 
@@ -140,9 +141,9 @@ static bool IsDotNetSdkProject(string projectPath)
     return !string.IsNullOrEmpty(project!.Sdk) || string.IsNullOrEmpty(project.DefaultTargets);
 }
 
-static void DisplayErrorMessage(string format, params object[] arguments)
+static void DisplayErrorMessage(string message)
 {
     ForegroundColor = ConsoleColor.Red;
-    WriteLine(format, arguments);
+    WriteLine(message);
     ResetColor();
 }
