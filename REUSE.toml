@@ -1,0 +1,19 @@
+# SPDX-FileCopyrightText: © 2024 Victor Derks
+# SPDX-License-Identifier: MIT
+
+# This is a configuration file for the reuse lint tool. It allows specifing license info
+# for files that cannot be extended with such info.
+
+version = 1
+
+[[annotations]]
+path = [
+    "exclusion.dic",
+    "VerifyProjectReferences.sln",
+    "VerifyProjectReferences.sln.DotSettings",
+    "nuget.config",
+    "global.json"
+]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "© 2024 VIctor Derks"
+SPDX-License-Identifier = "MIT"
