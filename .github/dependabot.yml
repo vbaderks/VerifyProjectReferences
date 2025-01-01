@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: © 2024 Victor Derks
+# SPDX-License-Identifier: MIT
+
 version: 2
 updates:
 - package-ecosystem: nuget

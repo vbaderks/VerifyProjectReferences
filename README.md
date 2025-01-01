@@ -1,3 +1,8 @@
+<!--
+  SPDX-FileCopyrightText: © 2021 Victor Derks
+  SPDX-License-Identifier: MIT
+-->
+
 # VerifyProjectReferences
 
 VerifyProjectReferences is a tool to verify that project references in a Visual Studio solution file (.sln) are correct.  

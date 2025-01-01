@@ -1,11 +1,11 @@
-# Copyright (c) Victor Derks.
+# SPDX-FileCopyrightText: © 2021 Victor Derks
 # SPDX-License-Identifier: MIT
 
 # User-specific files
 **/Properties/launchSettings.json
 
 # Build results
-build/
+artifacts/
 
 # Visual Studio cache/options directory
 .vs/
