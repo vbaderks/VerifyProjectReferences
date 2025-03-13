@@ -9,7 +9,6 @@ version = 1
 [[annotations]]
 path = [
     "exclusion.dic",
-    "VerifyProjectReferences.sln",
     "VerifyProjectReferences.sln.DotSettings",
     "nuget.config",
     "global.json"
