@@ -18,7 +18,7 @@ In this scenario Visual Studio will show a yellow triangle and the project refer
 
 ## Features
 
-* .NET 9.0 App.
+* .NET 10.0 App.
 
 ## Build Instructions
 
