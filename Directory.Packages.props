@@ -4,6 +4,6 @@
 -->
 <Project>
   <ItemGroup>
-    <PackageVersion Include="Microsoft.Build" Version="17.14.8" />
+    <PackageVersion Include="Microsoft.Build" Version="18.0.2" />
   </ItemGroup>
 </Project>
