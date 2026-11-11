@@ -138,7 +138,7 @@ static bool IsDotNetSdkProject(string projectPath)
 
     // If Sdk property is set, then the .csproj is in the new format. But it can also import the Sdk.
     // If the DefaultTargets="Build" then it is typical an old format.
-    return !string.IsNullOrEmpty(project!.Sdk) || string.IsNullOrEmpty(project.DefaultTargets);
+    return !string.IsNullOrEmpty(project.Sdk) || string.IsNullOrEmpty(project.DefaultTargets);
 }
 
 static void DisplayErrorMessage(string message)
